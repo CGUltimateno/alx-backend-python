@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Type-annotated function safely_get_value
-that takes a dict and a key as arguments and returns the value."""
+that takes a dict and a key as
+arguments and returns the value."""
 from typing import Union, Any, TypeVar, Mapping
 
 T = TypeVar('T')
