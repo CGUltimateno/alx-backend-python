@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
  an async routine that will spawn
 another async coroutine for some given
