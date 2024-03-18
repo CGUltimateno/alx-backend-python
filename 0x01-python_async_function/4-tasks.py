@@ -16,10 +16,10 @@ async def task_wait_n(n: int, max_delay: int) -> typing.List[float]:
     The code is nearly identical to wait_n
     except task_wait_random is being called.
     """
-    task_wait_random: typing.Callable[[int], asyncio.Task] = \
+    task_wait_random: typing.Callable[[float], typing.Awaitable[float]] = \
         __import__('3-tasks').task_wait_random
-    l = typing.List[float] = []
+    my_lis = typing.List[float] = []
 
     for i in range(0, n):
-        l.append(await task_wait_random(max_delay))
-    return sorted(l)
+        my_lis.append(await task_wait_random(max_delay))
+    return sorted(my_lis)
