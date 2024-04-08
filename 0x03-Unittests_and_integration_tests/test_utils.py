@@ -6,22 +6,21 @@ import unittest
 from unittest.mock import patch, Mock
 
 import parameterized
-from utils import get_random_number, get_random_number_v2, get_random_number_v3
+from utils import access_nested_map, get_json
 
 
-class TestAccessNestedMap (unittest.TestCase):
+class TestAccessNestedMap(unittest.TestCase):
     """
     Test cases.
     """
+
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
     def test_access_nested_map(self, nested_map, keys, expected):
-        """
-        Test access_nested_map function.
-        """
+        """ Test access_nested_map function."""
         self.assertEqual(access_nested_map(nested_map, keys), expected)
 
         @parameterized.expand([
@@ -35,9 +34,8 @@ class TestAccessNestedMap (unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    """
-    Test cases.
-    """
+    """Test Cases"""
+
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False})
@@ -50,4 +48,11 @@ class TestGetJson(unittest.TestCase):
         mock_get.return_value = Mock()
         mock_get.return_value.json.return_value = payload
 
-        self.assertEqual(get_json(url), payload)
+        # Call the function
+        result = get_json(url)
+
+        # Assert that requests.get is called once with the correct URL
+        mock_get.assert_called_once_with(url)
+
+        # Assert that the output of get_json is equal to test_payload
+        self.assertEqual(result, payload)
