@@ -73,24 +73,32 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     Integration test cases.
     """
 
-    @parameterized.expand([
-        ("google"),
-        ("abc")
-    ])
-    def test_public_repos(self, org_name):
+    @classmethod
+    def setUpClass(cls):
+        cls.get_patcher = patch('requests.get', side_effect=[
+            cls.org_payload, cls.repos_payload
+        ])
+        cls.mocked_get = cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
         """
         Test GithubOrgClient.public_repos.
         """
-        gc = GithubOrgClient(org_name)
-        self.assertEqual(gc.public_repos(), ['google', 'abc'])
+        test_class = GithubOrgClient('google')
+        self.assertEqual(test_class.org, self.org_payload)
+        self.assertEqual(test_class.repos_payload, self.repos_payload)
+        self.assertEqual(test_class.public_repos(), ['google', 'abc'])
 
-    @parameterized.expand([
-        ("google", "my_license"),
-        ("abc", "my_license")
-    ])
-    def test_public_repos_with_license(self, org_name, license):
+    def test_public_repos_with_license(self):
         """
         Test GithubOrgClient.public_repos with license.
         """
-        gc = GithubOrgClient(org_name)
-        self.assertEqual(gc.public_repos(license), ['google'])
+        test_class = GithubOrgClient('google')
+        self.assertEqual(test_class.org, self.org_payload)
+        self.assertEqual(test_class.repos_payload, self.repos_payload)
+        self.assertEqual(test_class.public_repos('my_license'), ['google'])
+
