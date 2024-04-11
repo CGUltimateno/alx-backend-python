@@ -30,7 +30,7 @@ class TestAccessNestedMap(unittest.TestCase):
         def test_access_nested_map_exception(self, nested_map, nested_key):
             """Test KeyError"""
             with self.assertRaises(KeyError):
-                access_nested_map(nested_map, nested_key)
+                self.assertEqual(access_nested_map(nested_map, nested_key), expected)
 
 
 class TestGetJson(unittest.TestCase):
@@ -45,14 +45,10 @@ class TestGetJson(unittest.TestCase):
         """
         Test get_json function.
         """
-        mock_get.return_value = Mock()
-        mock_get.return_value.json.return_value = payload
+        mock = Mock()
+        mock.json.return_value = payload
 
-        # Call the function
-        result = get_json(url)
-
-        # Assert that requests.get is called once with the correct URL
-        mock_get.assert_called_once_with(url)
-
-        # Assert that the output of get_json is equal to test_payload
-        self.assertEqual(result, payload)
+        with patch("requests.get", return_value=mock) as magic_mock:
+            response = get_json(url)
+            magic_mock.assert_called_once_with(url)
+            self.assertEqual(response, payload)
