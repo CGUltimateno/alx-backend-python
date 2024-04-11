@@ -15,8 +15,8 @@ class TestGithubOrgClient(unittest.TestCase):
     """
 
     @parameterized.expand([
-        ("google"),
-        ("abc")
+        "google",
+        "abc"
     ])
     @patch('client.get_json')
     def test_org(self, org_name, mock_get_json):
@@ -101,4 +101,3 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         self.assertEqual(test_class.org, self.org_payload)
         self.assertEqual(test_class.repos_payload, self.repos_payload)
         self.assertEqual(test_class.public_repos('my_license'), ['google'])
-
